@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Revelação</title>
+  <link rel="stylesheet" href="assets/css/darpalpite.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: #f5f5fa;
+      overflow-x: hidden;
+    }
+    #video-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+    }
+    #interrogacoes-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .container-revelacao {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-revelacao {
+      max-width: 90vw;
+      max-height: 60vh;
+      border-radius: 24px;
+      box-shadow: 0 4px 32px #0002;
+      margin-bottom: 32px;
+      background: #fff;
+    }
+    .btn-voltar {
+      padding: 12px 32px;
+      font-size: 1.2rem;
+      border-radius: 24px;
+      border: none;
+      background: linear-gradient(90deg, #7b2ff2, #f357a8);
+      color: #fff;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #7b2ff220;
+      transition: background 0.3s;
+    }
+    .btn-voltar:hover {
+      background: linear-gradient(90deg, #f357a8, #7b2ff2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container-revelacao">
+    <video class="video-revelacao" id="video-revelacao" controls autoplay>
+      <source src="assets/img/videodarevelcaofinal.webm" type="video/webm">
+      Seu navegador não suporta vídeo.
+    </video>
+   
+  </div>
+
+  <!-- Fundo animado -->
+  <div id="interrogacoes-bg"></div>
+  <video id="video-bg" autoplay loop muted playsinline>
+    <source src="assets/img/videodefundo.webm" type="video/webm">
+  </video>
+  
+  <audio id="musicaFundo" src="assets/audio/APLMatecomLindoMomento_PianoInstrumental_DEVOCIONALADORAO.mp3" loop></audio>
+  <script>
+    // Música de fundo igual às outras páginas
+    const musicaFundo = document.getElementById('musicaFundo');
+    window.addEventListener('DOMContentLoaded', function() {
+      const tempoSalvo = localStorage.getItem('musicaTempo');
+      const estavaTocando = localStorage.getItem('musicaTocando') === 'true';
+      if (tempoSalvo) {
+        musicaFundo.currentTime = parseFloat(tempoSalvo);
+      }
+      if (estavaTocando) {
+        musicaFundo.play().catch(()=>{});
+      }
+    });
+    window.addEventListener('beforeunload', function() {
+      localStorage.setItem('musicaTempo', musicaFundo.currentTime);
+      localStorage.setItem('musicaTocando', !musicaFundo.paused);
+    });
+  </script>
+</body>
+</html>

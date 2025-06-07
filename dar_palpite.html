@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dar o Palpite</title>
+  <link rel="stylesheet" href="assets/css/darpalpite.css">
+</head>
+<body>
+  <div class="container">
+    <video id="video-bg" autoplay loop muted playsinline>
+      <source src="assets/img/videodefundo.webm" type="video/webm">
+    </video>
+    
+    <h2>Conta pra gente: o que você acha ?</h2>
+    <video id="video-intro" autoplay muted playsinline loop>
+      <source src="assets/img/videopalpites.webm" type="video/webm">
+    </video>
+    <div class="palpite-opcoes" id="opcoes-palpite">
+      <button class="btn-menino" onclick="selecionarPalpite('Kenzo')">
+        🩵 Kenzo
+      </button>
+      <button class="btn-menina" onclick="selecionarPalpite('Sayuri')">
+        🌸 Sayuri
+      </button>
+    </div>
+    <div id="palpiteSelecionado" style="display:none; margin-top:24px;">
+      <p>Você selecionou: <span id="selecao"></span></p>
+      <button onclick="continuar()">Continuar</button>
+    </div>
+  </div>
+
+  <audio id="musicaFundo" src="assets/audio/APLMatecomLindoMomento_PianoInstrumental_DEVOCIONALADORAO.mp3" loop></audio>
+
+  <!-- Firebase App (core) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Database -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // Controle da música de fundo
+    const musicaFundo = document.getElementById('musicaFundo');
+    window.addEventListener('DOMContentLoaded', function() {
+      const tempoSalvo = localStorage.getItem('musicaTempo');
+      const estavaTocando = localStorage.getItem('musicaTocando') === 'true';
+      if (tempoSalvo) {
+        musicaFundo.currentTime = parseFloat(tempoSalvo);
+      }
+      if (estavaTocando) {
+        musicaFundo.play().catch(()=>{});
+      }
+    });
+    window.addEventListener('beforeunload', function() {
+      localStorage.setItem('musicaTempo', musicaFundo.currentTime);
+      localStorage.setItem('musicaTocando', !musicaFundo.paused);
+    });
+
+    // Inicialização do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZudV-7cWr79tHqFa18A6M6v6vF6xyjf4",
+      authDomain: "charevelacao-9a8fa.firebaseapp.com",
+      databaseURL: "https://charevelacao-9a8fa-default-rtdb.firebaseio.com",
+      projectId: "charevelacao-9a8fa",
+      storageBucket: "charevelacao-9a8fa.appspot.com",
+      messagingSenderId: "697565206153",
+      appId: "1:697565206153:web:1f6271d042672437bbd858",
+      measurementId: "G-B9TM0P4T4H"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    // Função de votar e falar o nome ao votar
+    function selecionarPalpite(nome) {
+      const nomePessoa = localStorage.getItem('nomeUsuario');
+      if (!nomePessoa) {
+        alert('Nome não encontrado. Volte e digite seu nome.');
+        window.location.href = 'index.html';
+        return;
+      }
+      // Esconde opções e mostra seleção
+      document.getElementById('opcoes-palpite').style.display = 'none';
+      document.getElementById('palpiteSelecionado').style.display = 'block';
+      document.getElementById('selecao').textContent = nome;
+
+      // Salva localmente para mostrar depois
+      localStorage.setItem('votoUsuario', nome);
+
+      // Salva no Firebase
+      const votoRef = nome === 'Kenzo' ? 'kenzoVotes' : 'sayuriVotes';
+      db.ref(votoRef).transaction(current => (current || 0) + 1, function(error, committed) {
+        if (error || !committed) {
+          alert('Erro ao registrar voto. Tente novamente.');
+          // Volta para as opções se der erro
+          document.getElementById('opcoes-palpite').style.display = 'block';
+          document.getElementById('palpiteSelecionado').style.display = 'none';
+        }
+      });
+
+      db.ref('votantes').push({
+        nome: nomePessoa,
+        voto: nome,
+        data: new Date().toISOString()
+      });
+
+      // Fala o resultado do palpite
+      if (typeof gerarAudio === "function") {
+        const texto = `Que legal ${nomePessoa}, você votou em ${nome}! Mas antes de sabermos o resultado, vamos ver qual é o palpite dos nossos convidados e amigos!`;
+        gerarAudio(texto, false);
+      }
+    }
+
+  
+
+    function continuar() {
+      window.location.href = 'porcentagens.html';
+    }
+  </script>
+  <script src="assets/js/dar_palpite.js"></script>
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

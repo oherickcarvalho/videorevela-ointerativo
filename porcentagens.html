@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado dos Palpites</title>
+  <link rel="stylesheet" href="assets/css/porcentagens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+  <div class="container-balloons">
+    <h1 class="title-balloons">Palpites da galera! 👀</h1>
+    
+    <div class="balloons-container">
+      <div class="balloon boy-balloon">
+        <div class="balloon-shape">
+          <span id="boy-percentage">0%</span>
+          <span class="balloon-label">Kenzo</span>
+        </div>
+        <div class="balloon-string"></div>
+      </div>
+      <div class="balloon girl-balloon">
+        <div class="balloon-shape">
+          <span id="girl-percentage">0%</span>
+          <span class="balloon-label">Sayuri</span>
+        </div>
+        <div class="balloon-string"></div>
+      </div>
+    </div>
+    
+    <div class="results-footer">
+      <button class="btn-restart" onclick="window.location.href='REVELACAO.HTML'">Tá na hora! 🎉🌸🩵</button>
+    </div>
+  </div>
+
+  <!-- Fundo animado -->
+  <div id="interrogacoes-bg"></div>
+  <video id="video-bg" autoplay loop muted playsinline>
+    <source src="assets/img/videodefundo.webm" type="video/webm">
+  </video>
+  
+  <audio id="musicaFundo" src="assets/audio/APLMatecomLindoMomento_PianoInstrumental_DEVOCIONALADORAO.mp3" loop></audio>
+
+  <!-- Firebase App (core) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Database -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZudV-7cWr79tHqFa18A6M6v6vF6xyjf4",
+      authDomain: "charevelacao-9a8fa.firebaseapp.com",
+      databaseURL: "https://charevelacao-9a8fa-default-rtdb.firebaseio.com",
+      projectId: "charevelacao-9a8fa",
+      storageBucket: "charevelacao-9a8fa.appspot.com",
+      messagingSenderId: "697565206153",
+      appId: "1:697565206153:web:1f6271d042672437bbd858",
+      measurementId: "G-B9TM0P4T4H"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+  </script>
+  <script src="assets/js/porcentagens.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Chá Revelação Interativo</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <video id="video-bg" autoplay loop muted playsinline>
+    <source src="assets/img/videodefundo.webm" type="video/webm">
+  </video>
+  <div class="container">
+    <h2>Bem-vindo(a)</h2>
+    <p>Antes de começarmos, digite seu nome para embarcar nessa aventura com a gente!</p>
+    <!-- Segundo vídeo entre a frase e o input -->
+    <video id="video-intro" autoplay muted playsinline loop>
+      <source src="assets/img/Video Com Fundo.webm" type="video/webm">
+    </video>
+    <label for="nomePessoa">Seu nome:</label>
+    <input type="text" id="nomePessoa" placeholder="Digite seu nome" />
+    <button onclick="iniciarPalpite()">Continuar</button>
+  </div>
+
+  <!-- Áudio de fundo -->
+  <audio id="musicaFundo" src="assets/audio/APLMatecomLindoMomento_PianoInstrumental_DEVOCIONALADORAO.mp3" loop></audio>
+
+  <script>
+    // Toca o áudio assim que o usuário interagir com a página
+    function iniciarAudioFundo() {
+      document.getElementById('musicaFundo').play();
+      document.body.removeEventListener('click', iniciarAudioFundo);
+    }
+    document.body.addEventListener('click', iniciarAudioFundo);
+
+    // Função para salvar o nome e ir para a página de palpite
+    function iniciarPalpite() {
+      const nome = document.getElementById('nomePessoa').value.trim();
+      if (!nome) {
+        alert("Por favor, digite seu nome!");
+        return;
+      }
+      localStorage.setItem("nomeUsuario", nome);
+      window.location.href = "dar_palpite.html";
+    }
+  </script>
+  <script src="assets/js/script.js"></script>
+  
+</body>
+</html>
